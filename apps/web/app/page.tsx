@@ -1,102 +1,84 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+'use client';
 
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
+import { NeobankSDK } from '@raga-neobank/core';
+import { VaultList } from '../components/VaultList';
+import { Portfolio } from '../components/Portfolio';
+import { TransactionBuilder } from '../components/TransactionBuilder';
+import './demo.css';
 
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
+// Initialize SDK with environment variables
+const initSDK = () => {
+  const apiKey = process.env.NEXT_PUBLIC_NEOBANK_API_KEY;
+  const userAddress = process.env.NEXT_PUBLIC_USER_ADDRESS;
+  const baseUrl = process.env.NEXT_PUBLIC_NEOBANK_BASE_URL;
 
-  return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
+  if (!apiKey) {
+    throw new Error('NEXT_PUBLIC_NEOBANK_API_KEY is not set. Please check your .env.local file.');
+  }
+
+  return new NeobankSDK({
+    apiKey,
+    userAddress,
+    baseUrl,
+  });
 };
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  let sdk: NeobankSDK;
+  let sdkError: string | null = null;
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.dev/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
+  try {
+    sdk = initSDK();
+  } catch (error) {
+    sdkError = error instanceof Error ? error.message : 'Failed to initialize SDK';
+  }
+
+  if (sdkError) {
+    return (
+      <div className="page">
+        <main className="main">
+          <h1>Raga Neobank SDK Demo</h1>
+          <div className="error">
+            <h2>Configuration Error</h2>
+            <p>{sdkError}</p>
+            <p>Please create a .env.local file based on .env.example and fill in your credentials.</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className="page">
+      <main className="main">
+        <header className="header">
+          <h1>Raga Neobank SDK Demo</h1>
+          <p className="subtitle">Explore the @raga-neobank/core SDK capabilities</p>
+        </header>
+
+        <section className="section">
+          <VaultList sdk={sdk} />
+        </section>
+
+        <section className="section">
+          <Portfolio sdk={sdk} />
+        </section>
+
+        <section className="section">
+          <TransactionBuilder sdk={sdk} />
+        </section>
+
+        <footer className="footer">
+          <p>
+            Powered by <strong>@raga-neobank/core</strong> v0.1.0
+          </p>
+          <p>
+            <a href="https://github.com/Nexus-2023/neobank-sdk" target="_blank" rel="noopener noreferrer">
+              View on GitHub
+            </a>
+          </p>
+        </footer>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.dev?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.dev →
-        </a>
-      </footer>
     </div>
   );
 }

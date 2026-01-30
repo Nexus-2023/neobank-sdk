@@ -1,0 +1,260 @@
+.page {
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(to bottom, #f5f7fa, #e4e8ec);
+}
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #1a1a1a;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section h2 {
+  margin-top: 0;
+  color: #1a1a1a;
+  border-bottom: 2px solid #e4e8ec;
+  padding-bottom: 0.5rem;
+}
+
+.loading {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.error {
+  padding: 1rem;
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  color: #c33;
+}
+
+.vaults-grid,
+.positions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.vault-card,
+.position-card {
+  padding: 1.5rem;
+  background: #f9fafb;
+  border: 1px solid #e4e8ec;
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.vault-card:hover,
+.position-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.vault-card h3,
+.position-card h4 {
+  margin-top: 0;
+  color: #1a1a1a;
+}
+
+.vault-info,
+.position-info {
+  margin-top: 1rem;
+}
+
+.vault-info p,
+.position-info p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+code {
+  background: #f0f0f0;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: 'Courier New', monospace;
+}
+
+.status-enabled {
+  color: #0a0;
+  font-weight: 600;
+}
+
+.status-disabled {
+  color: #c33;
+  font-weight: 600;
+}
+
+.profit {
+  color: #0a0;
+  font-weight: 600;
+}
+
+.loss {
+  color: #c33;
+  font-weight: 600;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.build-button {
+  padding: 0.75rem 1.5rem;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+
+.build-button:hover:not(:disabled) {
+  background: #357abd;
+}
+
+.build-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.result {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border: 1px solid #e4e8ec;
+  border-radius: 8px;
+}
+
+.result h3,
+.result h4 {
+  margin-top: 0;
+  color: #1a1a1a;
+}
+
+.result-summary {
+  margin: 1rem 0;
+}
+
+.warnings {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+}
+
+.warnings ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+.tx-step {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #e4e8ec;
+  border-radius: 6px;
+}
+
+.tx-step p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.footer {
+  margin-top: 3rem;
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.footer a {
+  color: #4a90e2;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.portfolio-header {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+
+.portfolio-header p {
+  margin: 0.5rem 0;
+}
