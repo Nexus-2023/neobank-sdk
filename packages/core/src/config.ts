@@ -58,7 +58,7 @@ export function validateConfig(config: NeobankConfig): ValidatedConfig {
 
   return {
     apiKey: config.apiKey,
-    userAddress: config.userAddress,
+    userAddress: config.userAddress?.toLowerCase(),
     baseUrl,
     timeout,
   };

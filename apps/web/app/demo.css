@@ -91,12 +91,14 @@
 }
 
 .vault-info,
-.position-info {
+.position-info,
+.user-info {
   margin-top: 1rem;
 }
 
 .vault-info p,
-.position-info p {
+.position-info p,
+.user-info p {
   margin: 0.5rem 0;
   font-size: 0.95rem;
 }

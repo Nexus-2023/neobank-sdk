@@ -1,60 +1,54 @@
-'use client';
+"use client"
 
-import { useState } from 'react';
-import { NeobankSDK, type TransactionPayload, isNeobankError } from '@raga-neobank/core';
+import { useState } from "react"
+import { isNeobankError } from "@raga-neobank/core"
+import { useBuildTransaction } from "../hooks/use-transactions"
 
-interface TransactionBuilderProps {
-  sdk: NeobankSDK;
-}
+export function TransactionBuilder() {
+  const [vaultId, setVaultId] = useState("e63b2ca2-75e8-43fa-9f1f-bc753502ecc8")
+  const [amount, setAmount] = useState("1000000")
+  const [chainId, setChainId] = useState("8453")
+  const [txType, setTxType] = useState<"deposit" | "withdraw" | "redeem">(
+    "deposit",
+  )
 
-export function TransactionBuilder({ sdk }: TransactionBuilderProps) {
-  const [vaultId, setVaultId] = useState('');
-  const [amount, setAmount] = useState('');
-  const [chainId, setChainId] = useState('8453');
-  const [txType, setTxType] = useState<'deposit' | 'withdraw' | 'redeem'>('deposit');
-  const [result, setResult] = useState<TransactionPayload | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    mutate: buildTransaction,
+    data: result,
+    isPending: loading,
+    error: mutationError,
+    reset,
+  } = useBuildTransaction()
 
-  const buildTransaction = async () => {
+  const [validationError, setValidationError] = useState<string | null>(null)
+
+  const handleBuild = () => {
+    setValidationError(null)
     if (!vaultId || !amount || !chainId) {
-      setError('Please fill in all fields');
-      return;
+      setValidationError("Please fill in all fields")
+      return
     }
 
-    try {
-      setLoading(true);
-      setError(null);
+    buildTransaction({
+      vaultId,
+      amount,
+      chainId: parseInt(chainId),
+      type: txType,
+    })
+  }
 
-      const payload = {
-        vaultId,
-        amount,
-        chainId: parseInt(chainId),
-      };
-
-      let txPayload: TransactionPayload;
-      if (txType === 'deposit') {
-        txPayload = await sdk.transactions.buildDepositPayload(payload);
-      } else if (txType === 'withdraw') {
-        txPayload = await sdk.transactions.buildWithdrawPayload(payload);
-      } else {
-        txPayload = await sdk.transactions.buildRedeemPayload(payload);
-      }
-
-      setResult(txPayload);
-    } catch (err) {
-      if (isNeobankError(err)) {
-        setError(`Error ${err.code}: ${err.message} - ${err.detail || 'No details'}`);
-      } else if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Failed to build transaction');
-      }
-      setResult(null);
-    } finally {
-      setLoading(false);
+  const getErrorMessage = (err: any) => {
+    if (isNeobankError(err)) {
+      return `Error ${err.code}: ${err.message} - ${err.detail || "No details"}`
     }
-  };
+    if (err instanceof Error) {
+      return err.message
+    }
+    return "Failed to build transaction"
+  }
+
+  const error =
+    validationError || (mutationError ? getErrorMessage(mutationError) : null)
 
   return (
     <div className="transaction-builder">
@@ -66,7 +60,10 @@ export function TransactionBuilder({ sdk }: TransactionBuilderProps) {
           <select
             id="txType"
             value={txType}
-            onChange={(e) => setTxType(e.target.value as 'deposit' | 'withdraw' | 'redeem')}
+            onChange={e => {
+              setTxType(e.target.value as "deposit" | "withdraw" | "redeem")
+              reset()
+            }}
           >
             <option value="deposit">Deposit</option>
             <option value="withdraw">Withdraw</option>
@@ -80,7 +77,7 @@ export function TransactionBuilder({ sdk }: TransactionBuilderProps) {
             id="vaultId"
             type="text"
             value={vaultId}
-            onChange={(e) => setVaultId(e.target.value)}
+            onChange={e => setVaultId(e.target.value)}
             placeholder="6e9b8e9f-bb3e-4e8a-b9ea-f3ab27449b38"
           />
         </div>
@@ -91,7 +88,7 @@ export function TransactionBuilder({ sdk }: TransactionBuilderProps) {
             id="amount"
             type="text"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={e => setAmount(e.target.value)}
             placeholder="1000000"
           />
         </div>
@@ -102,17 +99,26 @@ export function TransactionBuilder({ sdk }: TransactionBuilderProps) {
             id="chainId"
             type="text"
             value={chainId}
-            onChange={(e) => setChainId(e.target.value)}
+            onChange={e => setChainId(e.target.value)}
             placeholder="8453"
           />
         </div>
 
-        <button onClick={buildTransaction} disabled={loading} className="build-button">
-          {loading ? 'Building...' : `Build ${txType} Transaction`}
+        <button
+          onClick={handleBuild}
+          disabled={loading}
+          className="build-button"
+        >
+          {loading ? "Building..." : `Build ${txType} Transaction`}
         </button>
       </div>
 
-      {error && <div className="error">Error: {error}</div>}
+      {error && (
+        <div className="error">
+          <h3>Transaction Error</h3>
+          <p>{error}</p>
+        </div>
+      )}
 
       {result && (
         <div className="result">
@@ -140,7 +146,7 @@ export function TransactionBuilder({ sdk }: TransactionBuilderProps) {
           </div>
 
           <h4>Transaction Steps ({result.txs.length})</h4>
-          {result.txs.map((tx) => (
+          {result.txs.map(tx => (
             <div key={tx.step} className="tx-step">
               <p>
                 <strong>Step {tx.step}:</strong> {tx.description}
@@ -155,9 +161,13 @@ export function TransactionBuilder({ sdk }: TransactionBuilderProps) {
                 <strong>Gas Estimate:</strong> {tx.gasEstimate}
               </p>
               <p>
-                <strong>Simulation:</strong>{' '}
-                <span className={tx.simulationSuccess ? 'status-enabled' : 'status-disabled'}>
-                  {tx.simulationSuccess ? 'Success' : 'Failed'}
+                <strong>Simulation:</strong>{" "}
+                <span
+                  className={
+                    tx.simulationSuccess ? "status-enabled" : "status-disabled"
+                  }
+                >
+                  {tx.simulationSuccess ? "Success" : "Failed"}
                 </span>
               </p>
             </div>
@@ -165,5 +175,5 @@ export function TransactionBuilder({ sdk }: TransactionBuilderProps) {
         </div>
       )}
     </div>
-  );
+  )
 }

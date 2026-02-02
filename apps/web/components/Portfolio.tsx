@@ -1,44 +1,34 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { NeobankSDK, type Portfolio as PortfolioType, isNeobankError } from '@raga-neobank/core';
+import { type Portfolio as PortfolioType, isNeobankError } from '@raga-neobank/core';
+import { usePortfolio } from '../hooks/use-portfolio';
 
-interface PortfolioProps {
-  sdk: NeobankSDK;
-}
+export function Portfolio() {
+  const { data: portfolio, isLoading, error, refetch } = usePortfolio();
 
-export function Portfolio({ sdk }: PortfolioProps) {
-  const [portfolio, setPortfolio] = useState<PortfolioType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchPortfolio() {
-      try {
-        setLoading(true);
-        const data = await sdk.portfolio.getPortfolio();
-        setPortfolio(data);
-        setError(null);
-      } catch (err) {
-        if (isNeobankError(err)) {
-          setError(`Error ${err.code}: ${err.message}`);
-        } else {
-          setError('Failed to fetch portfolio');
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchPortfolio();
-  }, [sdk]);
-
-  if (loading) {
+  if (isLoading) {
     return <div className="loading">Loading portfolio...</div>;
   }
 
   if (error) {
-    return <div className="error">Error: {error}</div>;
+    let errorMessage = 'Failed to fetch portfolio';
+    if (isNeobankError(error)) {
+      errorMessage = `Error ${error.code}: ${error.message}`;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    return (
+      <div className="error">
+        <h3>Portfolio Error</h3>
+        <p>{errorMessage}</p>
+        <button 
+          onClick={() => refetch()}
+          className="retry-button"
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
 
   if (!portfolio) {

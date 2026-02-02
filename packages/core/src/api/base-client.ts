@@ -34,7 +34,7 @@ export class BaseClient {
       headers['x-api-key'] = this.config.apiKey;
 
       if (this.config.userAddress) {
-        headers['userAddress'] = this.config.userAddress;
+        headers['x-user-address'] = this.config.userAddress;
       } else {
         throw new Error('userAddress is required for authenticated endpoints');
       }
