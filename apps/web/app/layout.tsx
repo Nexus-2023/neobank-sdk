@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import "./globals.css"
+import "@raga-neobank/ui/theme.css"
 import Providers from "./Providers"
 
 const geistSans = localFont({

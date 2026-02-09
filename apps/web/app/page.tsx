@@ -4,7 +4,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import {
   DocHeader,
   DocFooter,
-  OverviewTab,
   CoreTab,
   ReactTab,
   ArchitectureTab,
@@ -16,7 +15,7 @@ export default function SDKDocumentation() {
       <DocHeader />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-        <Tabs defaultValue="overview">
+        <Tabs defaultValue="core">
           <TabsList className="mb-8">
             <TabsTrigger value="core">Core SDK</TabsTrigger>
             <TabsTrigger value="react">React Hooks</TabsTrigger>
