@@ -11,8 +11,12 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
-    "./styles.css": "./dist/theme.css",
-    "./theme.css": "./dist/theme.css"
+    "./styles.css": {
+      "default": "./dist/theme.css"
+    },
+    "./theme.css": {
+      "default": "./dist/theme.css"
+    }
   },
   "files": [
     "dist"

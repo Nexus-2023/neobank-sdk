@@ -13,7 +13,7 @@ export interface VaultShowcaseSkeletonProps {
 function CardSkeleton() {
   return (
     <div
-      className="rounded-xl p-5"
+      className="rounded-xl p-5 min-w-70"
       style={{
         borderRadius: "var(--raga-radius-xl)",
         border: "1px solid var(--raga-border)",
@@ -113,7 +113,7 @@ export function VaultShowcaseSkeleton({
   if (variant === "compact") {
     return (
       <div className={cn("space-y-2", className)}>
-        {items.map((i) => (
+        {items.map(i => (
           <CompactSkeleton key={i} />
         ))}
       </div>
@@ -123,7 +123,7 @@ export function VaultShowcaseSkeleton({
   if (variant === "list") {
     return (
       <div className={cn("space-y-3", className)}>
-        {items.map((i) => (
+        {items.map(i => (
           <RowSkeleton key={i} />
         ))}
       </div>
@@ -131,8 +131,8 @@ export function VaultShowcaseSkeleton({
   }
 
   return (
-    <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", className)}>
-      {items.map((i) => (
+    <div className={cn("grid grid-cols-1    gap-4  w-80", className)}>
+      {items.map(i => (
         <CardSkeleton key={i} />
       ))}
     </div>

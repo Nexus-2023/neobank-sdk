@@ -80,9 +80,9 @@
 .raga-skeleton {
   background: linear-gradient(
     90deg,
-    var(--raga-muted) 0%,
-    color-mix(in srgb, var(--raga-muted) 50%, transparent) 50%,
-    var(--raga-muted) 100%
+    var(--raga-muted) 25%,
+    var(--raga-border) 50%,
+    var(--raga-muted) 75%
   );
   background-size: 200% 100%;
   animation: raga-shimmer 1.5s ease-in-out infinite;
