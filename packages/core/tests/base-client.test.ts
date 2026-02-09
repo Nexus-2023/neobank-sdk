@@ -40,17 +40,16 @@ describe('BaseClient', () => {
       });
 
       expect(result).toEqual(mockData);
-      expect(fetch).toHaveBeenCalledWith(
-        'https://api.test.com/test',
-        expect.objectContaining({
-          method: 'GET',
-          headers: expect.objectContaining({
-            'x-api-key': 'test-api-key',
-            'userAddress': '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0',
-          }),
-        })
-      );
-    });
+              expect(fetch).toHaveBeenCalledWith(
+              'https://api.test.com/test',
+              expect.objectContaining({
+                method: 'GET',
+                headers: expect.objectContaining({
+                  'x-api-key': 'test-api-key',
+                  'x-user-address': '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0',
+                }),
+              })
+            );    });
 
     it('should throw NeobankError on API error', async () => {
       const mockResponse: ApiResponse<null> = {

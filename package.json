@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "web": "turbo run dev --filter=web  --filter=@raga-neobank/core",
+    "web": "turbo run dev --filter=web  --filter=@raga-neobank/core --filter=@raga-neobank/ui",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
