@@ -80,7 +80,8 @@ function StepItem({
   showDetails?: boolean
 }) {
   const [expanded, setExpanded] = useState(false)
-  const config = STEP_TYPE_CONFIG[step.type] || STEP_TYPE_CONFIG.deposit
+  const defaultConfig = { label: "Action", icon: <ArrowRight className="w-4 h-4" />, color: "text-foreground" }
+  const config = STEP_TYPE_CONFIG[step.type] ?? defaultConfig
 
   const getStatusIcon = () => {
     if (isCompleted) {

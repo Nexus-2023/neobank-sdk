@@ -68,7 +68,7 @@ function MetricCard({ label, value, subValue, trend }: MetricCardProps) {
 interface PositionRowProps {
   position: PortfolioPosition
   vault?: Vault
-  onViewVault: (vaultId: string) => void
+  onViewVault: (vaultAddress: string) => void
 }
 
 function PositionRow({ position, vault, onViewVault }: PositionRowProps) {
@@ -125,7 +125,7 @@ function PositionRow({ position, vault, onViewVault }: PositionRowProps) {
       </td>
       <td style={{ padding: "16px 12px", textAlign: "right" }}>
         <button
-          onClick={() => onViewVault(position.vaultId)}
+          onClick={() => onViewVault(position.vaultAddress)}
           style={{
             padding: "6px 12px",
             fontSize: "12px",
@@ -145,7 +145,7 @@ function PositionRow({ position, vault, onViewVault }: PositionRowProps) {
 interface PositionsTableProps {
   positions: PortfolioPosition[]
   vaults: Vault[]
-  onViewVault: (vaultId: string) => void
+  onViewVault: (vaultAddress: string) => void
 }
 
 function PositionsTable({
@@ -156,7 +156,7 @@ function PositionsTable({
   const vaultMap = useMemo(() => {
     return vaults.reduce(
       (acc, vault) => {
-        acc[vault.id] = vault
+        acc[vault.vaultAddress] = vault
         return acc
       },
       {} as Record<string, Vault>
@@ -246,7 +246,7 @@ function PositionsTable({
           <PositionRow
             key={index}
             position={position}
-            vault={vaultMap[position.vaultId]}
+            vault={vaultMap[position.vaultAddress]}
             onViewVault={onViewVault}
           />
         ))}

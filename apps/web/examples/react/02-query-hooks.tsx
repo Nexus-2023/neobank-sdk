@@ -40,12 +40,7 @@ function VaultsList() {
 }
 
 function VaultDetails({ vaultId }: { vaultId: string }) {
-  const {
-    data: vault,
-    isLoading,
-    error,
-    isFetching,
-  } = useVault(vaultId)
+  const { data: vault, isLoading, error, isFetching } = useVault(vaultId)
 
   if (isLoading) {
     return <div>Loading vault details...</div>
@@ -72,19 +67,12 @@ function VaultDetails({ vaultId }: { vaultId: string }) {
 }
 
 function ConditionalVault({ vaultId }: { vaultId: string | null }) {
-  const { data: vault, isLoading } = useVault(vaultId || "", {
-    enabled: !!vaultId,
-  })
-
+  // Handle null case before using the hook
   if (!vaultId) {
     return <div>Select a vault to view details</div>
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
-  return vault ? <div>{vault.vaultName}</div> : null
+  return <VaultDetails vaultId={vaultId} />
 }
 
 function UserProfile() {
@@ -135,11 +123,11 @@ function Portfolio() {
 
   const totalDeposited = portfolio.positions.reduce(
     (sum, p) => sum + parseFloat(p.depositValueInUsd),
-    0
+    0,
   )
   const totalCurrent = portfolio.positions.reduce(
     (sum, p) => sum + parseFloat(p.currentValueInUsd),
-    0
+    0,
   )
   const totalPnL = totalCurrent - totalDeposited
 
@@ -219,9 +207,7 @@ function Dashboard() {
 }
 
 function LiveVaults() {
-  const { data: vaults, dataUpdatedAt } = useVaults({
-    refetchInterval: 30000,
-  })
+  const { data: vaults, dataUpdatedAt } = useVaults()
 
   return (
     <div>

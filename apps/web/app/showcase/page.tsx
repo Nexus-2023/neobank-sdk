@@ -37,7 +37,6 @@ const MOCK_PORTFOLIO: Portfolio = {
   walletAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0",
   positions: [
     {
-      vaultId: "vault-1",
       vaultName: "High Yield USDC",
       vaultAddress: "0x1234567890123456789012345678901234567890",
       chainId: 8453,
@@ -48,7 +47,6 @@ const MOCK_PORTFOLIO: Portfolio = {
       currentValueInUsd: "10850.00",
     },
     {
-      vaultId: "vault-2",
       vaultName: "ETH Growth Vault",
       vaultAddress: "0x2345678901234567890123456789012345678901",
       chainId: 1,
@@ -59,7 +57,6 @@ const MOCK_PORTFOLIO: Portfolio = {
       currentValueInUsd: "4800.00",
     },
     {
-      vaultId: "vault-3",
       vaultName: "Stable Yield",
       vaultAddress: "0x3456789012345678901234567890123456789012",
       chainId: 137,
@@ -427,20 +424,20 @@ export default function ShowcasePage() {
             <ShowcaseGrid columns={3}>
               <ShowcaseItem label="Card (Grid)">
                 <VaultItem
-                  vault={MOCK_VAULTS[0]}
+                  vault={MOCK_VAULTS[0]!}
                   variant="card"
                   showActions={false}
                 />
               </ShowcaseItem>
               <ShowcaseItem label="Row (List)">
                 <VaultItem
-                  vault={MOCK_VAULTS[0]}
+                  vault={MOCK_VAULTS[0]!}
                   variant="row"
                   showActions={false}
                 />
               </ShowcaseItem>
               <ShowcaseItem label="Compact">
-                <VaultItem vault={MOCK_VAULTS[0]} variant="compact" />
+                <VaultItem vault={MOCK_VAULTS[0]!} variant="compact" />
               </ShowcaseItem>
             </ShowcaseGrid>
           </div>

@@ -69,7 +69,7 @@ function DepositWithRefresh({ vaultId }: { vaultId: string }) {
             queryKey: neobankKeys.portfolio(),
           })
         },
-      }
+      },
     )
   }
 
@@ -165,10 +165,7 @@ function VaultListWithPrefetch() {
   return (
     <ul>
       {vaults?.map(vault => (
-        <li
-          key={vault.id}
-          onMouseEnter={() => prefetchVault(vault.id)}
-        >
+        <li key={vault.id} onMouseEnter={() => prefetchVault(vault.id)}>
           {vault.vaultName}
         </li>
       ))}
@@ -214,7 +211,7 @@ function SelectiveRefresh() {
   const refetchStale = () => {
     queryClient.refetchQueries({
       queryKey: neobankKeys.all,
-      type: "stale",
+      predicate: query => query.isStale(),
     })
   }
 
@@ -225,10 +222,10 @@ function SelectiveRefresh() {
     })
   }
 
-  const refetchInactive = () => {
+  const refetchAll = () => {
     queryClient.refetchQueries({
       queryKey: neobankKeys.all,
-      type: "inactive",
+      type: "all",
     })
   }
 
@@ -236,7 +233,7 @@ function SelectiveRefresh() {
     <div>
       <button onClick={refetchStale}>Refetch Stale</button>
       <button onClick={refetchActive}>Refetch Active</button>
-      <button onClick={refetchInactive}>Refetch Inactive</button>
+      <button onClick={refetchAll}>Refetch All</button>
     </div>
   )
 }

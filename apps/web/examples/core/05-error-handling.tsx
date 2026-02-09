@@ -4,7 +4,7 @@
  * Learn how to handle errors from the @raga-neobank/core SDK.
  */
 
-import { NeobankSDK, NeobankError, isNeobankError, ErrorCodes } from "@raga-neobank/core"
+import { NeobankSDK, NeobankError, isNeobankError } from "@raga-neobank/core"
 
 async function fetchWithErrorHandling(sdk: NeobankSDK) {
   try {
@@ -26,23 +26,23 @@ async function fetchWithErrorHandling(sdk: NeobankSDK) {
 }
 
 function handleErrorByCode(error: NeobankError): string {
-  switch (error.code) {
-    case ErrorCodes.UNAUTHORIZED:
+  // Use statusCode for HTTP-based error handling
+  switch (error.statusCode) {
+    case 401:
       return "Invalid API key. Please check your credentials."
 
-    case ErrorCodes.FORBIDDEN:
+    case 403:
       return "Access denied. You don't have permission for this action."
 
-    case ErrorCodes.NOT_FOUND:
+    case 404:
       return "The requested resource was not found."
 
-    case ErrorCodes.VALIDATION_ERROR:
+    case 400:
       return `Invalid request: ${error.detail || error.message}`
 
-    case ErrorCodes.RATE_LIMIT:
-      return "Too many requests. Please wait and try again."
-
-    case ErrorCodes.SERVER_ERROR:
+    case 500:
+    case 502:
+    case 503:
       return "Server error. Please try again later."
 
     default:
@@ -236,17 +236,17 @@ export {
  *
  * NeobankError properties:
  * - message: Human-readable error message
- * - code: API error code (number)
+ * - code: API-specific error code (number)
  * - statusCode: HTTP status code
  * - detail: Additional context (may be null)
  *
- * Common error codes (from ErrorCodes):
- * - UNAUTHORIZED (401): Invalid API key
- * - FORBIDDEN (403): Access denied
- * - NOT_FOUND (404): Resource not found
- * - VALIDATION_ERROR (400): Invalid request
- * - RATE_LIMIT (429): Too many requests
- * - SERVER_ERROR (500): Server error
+ * Common HTTP status codes:
+ * - 400: Bad request (invalid input)
+ * - 401: Unauthorized (invalid API key)
+ * - 403: Forbidden (access denied)
+ * - 404: Not found
+ * - 429: Rate limited
+ * - 500/502/503: Server errors
  *
  * Retry logic should only apply to transient errors (5xx, network).
  * Never retry on 4xx errors (except 429 after waiting).
